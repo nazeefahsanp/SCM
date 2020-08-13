@@ -1,0 +1,12 @@
+#***********************************************************************************************#
+# -> Every TCL script executes only if the expected setting exists and equal to “yes”           #
+# -> If the expected setting does not exist, the deployment procedure will be aborted           #
+#    with a proper error message displayed to the console and recorded in the deployment logs.  #
+# -> Syntax        : <SCRIPT NAME>=<Yes/No>                                                     #
+# -> <SCRIPT NAME> : name of the script  (available in PreConfig/PostConfig)                    #
+# -> <Yes/No>      : To specify whether to execute the script or not (case-insensitive)         #
+# -> # (Hash)      : Can be used to comment the script name (script will be will be ignored)    #
+#***********************************************************************************************#
+
+01_PWC_Pre_test.tcl=Yes
+03_PRE_PWC_AddBusinessObject.tcl=yes
