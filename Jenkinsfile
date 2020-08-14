@@ -9,7 +9,7 @@ pipeline {
 
     stage('Source_Code_Analysis') {
       steps {
-        withSonarQubeEnv 'SCM SonarQube Scanner'
+        withSonarQubeEnv(installationName: 'SCM SonarQube Scanner', credentialsId: 'SCM')
       }
     }
 
