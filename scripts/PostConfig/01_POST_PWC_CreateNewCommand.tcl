@@ -1,28 +1,31 @@
 # tcl file
 #
-# Create new command
+# Create new Menu
 
 #tcl;
 proc main {outputLog} {
-	set sCommandName "PWC_TEST_Command_1"
+	set sMenuName "SCM_TEST_MENU"
 	puts $outputLog "========================================================================"
-	puts $outputLog "INFO: start add command : $sCommandName"
+	puts $outputLog "INFO: start add Menu : $sMenuName"
 
 	set ierr [catch {
 		#Find if Type exists		
-		if { [string compare [mql list type $sCommandName] $sCommandName] != 0 } {
-			#adding channel
-			mql add command $sCommandName description "SCM Test Command"
-			puts $outputLog "added command"
+		if { [string compare [mql list type $sMenuName] $sMenuName] != 0 } {
+			#adding menu
+			mql add menu $sMenuName label "SCM Test Menu"
+			mql mod menu $sMenuName add command $SCM_TEST_Command
+
+			mql mod menu Actions add menu $sMenuName
+			puts $outputLog "added Menu"
 		} else { 
-			puts $outputLog "Command : '$sCommandName' already exist."
+			puts $outputLog "Menu : '$sMenuName' already exist."
 		} 
 
 	} outMsg]
 	 if {$ierr != 0} {
 		puts $outputLog "ERROR: $outMsg"
 	} else {
-		puts $outputLog "INFO: end add command : $sCommandName"
+		puts $outputLog "INFO: end add Menu : $sMenuName"
 		puts $outputLog "========================================================================"
 	}
 	return $ierr
