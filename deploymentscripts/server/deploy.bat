@@ -3,15 +3,17 @@
 REM setlocal enabledelayedexpansion
 
 echo **************************************************************
-echo ######################## deploy.bat ##########################
-echo[
+echo ######################## deploy.bat #########################
 
-set repoBranchName=%1
-set deploymentType=%2
-set targetTag=%3
-set originTag=%4
-set currentDir=%cd%
+set targetName=$1
 
-REM Calling ant deploy.xml
-call ant -buildfile %currentDir%/deploy_engine/deploy_windows.xml -DrepoBranchName="%repoBranchName%" -Ddeployment.type="%deploymentType%" -Dinput.origin.tag="%originTag%" -Dtarget.tag="%targetTag%"
-echo **************************************************************
+REM Check for the deployment directory
+if "%originTag%"=="" (
+     set buildDirName=%sourceDir%\pwc.%branchName%.build.%targetTag%
+     set deploymentType=Full
+ ) else (
+     set buildDirName=%sourceDir%\pwc.%branchName%.build.%originTag%_%targetTag%
+     set deploymentType=Delta
+ )
+
+call ant -buildfile %buildDirName%/server/deploymentscripts/deploy_engine/deploy.xml %targetName% -DrepoBranchName="%branchName%" -Ddeployment.type="%deploymentType%" -Dinput.origin.tag="%originTag%" -Dtarget.tag="%targetTag%"

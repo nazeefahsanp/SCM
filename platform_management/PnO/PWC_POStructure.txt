@@ -2,7 +2,7 @@
 // VPLM - P&O and Security database export
 
 // -----------------------------------------------------------------------------
-*VERSION 3DEXPERIENCER2020x
+*VERSION 422
 *NULL $
 *SEPARATOR ;
 
@@ -25,5 +25,5 @@
 // -----------------------------------------------------------------------------
 
 //IPEC Contexts
-*CONTEXT Export Control;Pratt and Whitney Canada;GLOBAL;$
-*CONTEXT Requirement Manager;Pratt and Whitney Canada;GLOBAL;$
+*CONTEXT Export Control;Company Name;GLOBAL;$
+*CONTEXT Requirement Manager;Company Name;GLOBAL;$

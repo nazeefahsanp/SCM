@@ -77,7 +77,7 @@ xmlns:unless="ant:unless">
 		<sequential>
 			<available file="@{directory}" type="dir" property="@{directory}_exist"/> <!--check if the directory available before executing-->
 			<echo message="DIRECTORY DOESNOT EXIST : @{directory}" unless:set="@{directory}_exist"/>		
-			<exec executable="${enovia.server.mql.executable}" dir="./tools" resultproperty="return.@{script}.@{procedure}" failonerror="true" if:set="@{directory}_exist">
+			<exec executable="mql" dir="./tools" resultproperty="return.@{script}.@{procedure}" failonerror="true" if:set="@{directory}_exist">
 				<arg line="-c 'set context user creator password &quot;${enovia.server.admin.password}&quot; ;set env TCL_PROC @{procedure}; set env DIRECTORY &quot;&quot;@{directory}&quot;&quot; ; run &quot;@{script}&quot; ;'" if:set="enovia.server.admin.password"/>
 				<arg line="-c 'set context user creator ;set env TCL_PROC @{procedure}; set env DIRECTORY &quot;&quot;@{directory}&quot;&quot; ; run &quot;@{script}&quot; ;'" unless:set="enovia.server.admin.password"/>
 			</exec>
@@ -187,7 +187,7 @@ xmlns:unless="ant:unless">
 	<target name="execute.unified_typing" description="unified_typing specialization and administration">											  
 	    <echo message="Package Name : ${ZipFile}"/>
 		<exec dir="${server_install_scripts}" executable="${enovia.server.cmd.executable}"  failonerror="true">																					
-			<arg line="/c CustoDataTool2.bat -user &quot;${platform.admin.user}&quot; -password &quot;${platform.nocas.admin.password}&quot; -file &quot;${ZipFile}&quot;"/>
+			<arg line="/c CustoDataTool2.bat -user creator -file &quot;${ZipFile}&quot;"/>
 		</exec>
 	</target>
 
@@ -286,7 +286,7 @@ xmlns:unless="ant:unless">
 <!--######################################## platform_management configuraiton ######################################-->
 	<target name="platform_management.configuration" depends="init" description="Platform_management  Configuration"> 
 
-		<available file="${platform_management_dir}/Configuration}" type="dir" property="platform_config_dir_exist"/> <!--check if the directory available before executing-->
+		<available file="${platform_management_dir}/Configuration" type="dir" property="platform_config_dir_exist"/> <!--check if the directory available before executing-->
 		<echo message="DIRECTORY DOESNOT EXIST : ${platform_management_dir}/Configuration}" unless:set="platform_config_dir_exist"/>
 
 		<exec dir="${server_install_scripts}" executable="${enovia.server.cmd.executable}"  failonerror="true" if:set="platform_config_dir_exist">
@@ -298,7 +298,7 @@ xmlns:unless="ant:unless">
 <!--########################################### platform_management Pno  #############################################-->
 	<target name="platform_management.PnO" depends="init" description="Platform_management PnO configuration"> 
 
-		<available file="${platform_management_dir}/PnO}" type="dir" property="platform_PnO_dir_exist"/> <!--check if the directory available before executing-->
+		<available file="${platform_management_dir}/PnO" type="dir" property="platform_PnO_dir_exist"/> <!--check if the directory available before executing-->
 		<echo message="DIRECTORY DOESNOT EXIST : ${platform_management_dir}/PnO}" unless:set="platform_PnO_dir_exist"/>
 
 		<exec dir="${server_install_scripts}" executable="${enovia.server.cmd.executable}"  failonerror="true" if:set="platform_PnO_dir_exist">
@@ -431,31 +431,16 @@ xmlns:unless="ant:unless">
 	<!--################################################ Import 3D Space Inex ###############################################-->
 	<target name="import.3DSpaceIndex" depends="init" description="Importing 3DSpaceIndex" if:set="config_file_exist"> 
 	
-		<if>
-			<equals arg1="${deployment.type}" arg2="Full" /> <!--check if the build is full or delta-->
-			<then>
-			   	<input message="Do you want to set PWC_config.xml file?" addproperty="need_config_update" validargs = "Y,N" /> <!--check if admin want to update the config file-->
-			</then>
-			<else>
-			   <property name="need_config_update" value="Y"/>
-			</else>
-		</if>
+	  	<replaceregexp file="${PWC_config_file}" 
+		match='@SERVER_TAGS@' 
+		replace='${enovia.sxi.config.servertags}'/> <!--replacing the server tag with the actual value from property file-->
+		
+		<echo message="Server Tags updated :  ${PWC_config_file}"/>
+		
+		<property name="full.index" value="Y">
+		<import.3DSpace.index script="deploy.tcl" procedure="import3DSpaceIndex" config.file="${PWC_config_file}" full.index="${full.index}"/> <!--import 3d space index-->
+		<echo message="Import 3D Space Index successful !!"/>
 
-		<if>
-			<equals arg1="${need_config_update}" arg2="Y" />
-			<then>
-	  			<replaceregexp file="${PWC_config_file}" 
-				match='@SERVER_TAGS@' 
-				replace='${enovia.sxi.config.servertags}'/> <!--replacing the server tag with the actual value from property file-->
-				<echo message="Server Tags updated :  ${PWC_config_file}"/>
-				<input message="Do you want to start full index?" addproperty="full.index" validargs = "Y,N" /> <!--check if admin need full indexing-->
-				<import.3DSpace.index script="deploy.tcl" procedure="import3DSpaceIndex" config.file="${PWC_config_file}" full.index="${full.index}"/> <!--import 3d space index-->
-				<echo message="Import 3D Space Index successful !!"/>
-			</then>
-			<else>
-		   		<echo message="Skip import 3dspace index !"/>
-		 	</else>
-		</if>
 	</target>
 	
 	<!--######################################### Copying files to output structure #########################################-->
@@ -480,5 +465,6 @@ xmlns:unless="ant:unless">
 		</copy>
 		<echo message="internal.war file copied into output package !!"/>
 
-	</target>
+	</target>	
+			
 </project>
