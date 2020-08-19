@@ -7,27 +7,17 @@ pipeline {
       }
     }
 
-    stage('Static Code Analysis') {
+    stage('Code Quality Gate') {
       steps {
-        bat(script: 'echo "Executing Quality gate""', returnStdout: true)
+        bat(script: 'echo "Executing Quality gate"', label: 'Static Code Analysis')
       }
     }
 
-    stage('Delta Extraction') {
+    stage('Packaging') {
       steps {
-        bat '%workingDir%/%targetTag%/buildscripts/build_engine/build.bat %targetTag% %workingDir% %originTag% '
-      }
-    }
-
-    stage('Transformation') {
-      steps {
-        bat '%workingDir%/%targetTag%/buildscripts/build_engine/build_transformation.bat %branchName% %targetTag% %workingDir% %originTag%'
-      }
-    }
-
-    stage('Compilation') {
-      steps {
-        bat '%workingDir%/%targetTag%/buildscripts/build_engine/build_compilation.bat %branchName% %targetTag% %workingDir% %originTag%'
+        bat(script: '%workingDir%/%targetTag%/buildscripts/build_engine/build.bat %targetTag% %workingDir% %originTag% ', label: 'Delta Extraction')
+        bat(script: '%workingDir%/%targetTag%/buildscripts/build_engine/build_transformation.bat %branchName% %targetTag% %workingDir% %originTag%', label: 'Transformation')
+        bat(script: '%workingDir%/%targetTag%/buildscripts/build_engine/build_compilation.bat %branchName% %targetTag% %workingDir% %originTag%', label: 'Compilation')
       }
     }
 
@@ -44,15 +34,10 @@ pipeline {
       }
     }
 
-    stage('Unified Typing') {
+    stage('Schema Update') {
       steps {
-        bat '%workingDir%/deploy_build.bat unified_typing'
-      }
-    }
-
-    stage('Execute Spinner') {
-      steps {
-        bat 'echo Spinner Execution'
+        bat(script: '%workingDir%/deploy_build.bat unified_typing', label: 'Unified Typing')
+        bat(script: 'echo "Execute Spinner"', label: 'Execute Spinner')
       }
     }
 
@@ -68,7 +53,7 @@ pipeline {
       }
     }
 
-    stage('Generate WAR') {
+    stage('') {
       parallel {
         stage('Generate WAR') {
           steps {
@@ -76,18 +61,12 @@ pipeline {
           }
         }
 
-        stage('Test') {
+        stage('Compile JPOs') {
           steps {
-            bat 'echo'
+            bat '%workingDir%/deploy_build.bat  compile.JPOs'
           }
         }
 
-      }
-    }
-
-    stage('Compile JPOs') {
-      steps {
-        bat '%workingDir%/deploy_build.bat  compile.JPOs'
       }
     }
 
@@ -101,6 +80,23 @@ pipeline {
       steps {
         bat '%workingDir%/deploy_build.bat  create.output_dir'
         bat '%workingDir%/deploy_build.bat create.output_package'
+      }
+    }
+
+    stage('Functionality Quality Gate') {
+      parallel {
+        stage('Functionality Quality Gate') {
+          steps {
+            echo 'Regression Tests'
+          }
+        }
+
+        stage('') {
+          steps {
+            echo 'Functional Tests'
+          }
+        }
+
       }
     }
 
