@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Code Checkout') {
       steps {
-        bat ' %sourceDir%/create_build.bat --branchName=%branchName% --targetTag=%targetTag% --originTag="%originTag%" --sourceDir=%sourceDir%'
+        bat ' %workingDir%/create_build.bat --branchName=%branchName% --targetTag=%targetTag% --originTag="%originTag%" --sourceDir=%workingDir%'
       }
     }
 
@@ -15,38 +15,38 @@ pipeline {
 
     stage('Delta Extraction') {
       steps {
-        bat '%sourceDir%/%targetTag%/buildscripts/build_engine/build.bat %targetTag% %sourceDir% %originTag% '
+        bat '%workingDir%/%targetTag%/buildscripts/build_engine/build.bat %targetTag% %workingDir% %originTag% '
       }
     }
 
     stage('Transformation') {
       steps {
-        bat '%sourceDir%/%targetTag%/buildscripts/build_engine/build_transformation.bat %branchName% %targetTag% %sourceDir% %originTag%'
+        bat '%workingDir%/%targetTag%/buildscripts/build_engine/build_transformation.bat %branchName% %targetTag% %workingDir% %originTag%'
       }
     }
 
     stage('Compilation') {
       steps {
-        bat '%sourceDir%/%targetTag%/buildscripts/build_engine/build_compilation.bat %branchName% %targetTag% %sourceDir% %originTag%'
+        bat '%workingDir%/%targetTag%/buildscripts/build_engine/build_compilation.bat %branchName% %targetTag% %workingDir% %originTag%'
       }
     }
 
     stage('PreConfig') {
       steps {
-        bat '%sourceDir%/deploy_build.bat execute.preconfig_scripts'
+        bat '%workingDir%/deploy_build.bat execute.preconfig_scripts'
       }
     }
 
     stage('Platform Management') {
       steps {
-        bat '%sourceDir%/deploy_build.bat platform_management.configuration'
-        bat '%sourceDir%/deploy_build.bat  platform_management.PnO'
+        bat '%workingDir%/deploy_build.bat platform_management.configuration'
+        bat '%workingDir%/deploy_build.bat  platform_management.PnO'
       }
     }
 
     stage('Unified Typing') {
       steps {
-        bat '%sourceDir%/deploy_build.bat unified_typing'
+        bat '%workingDir%/deploy_build.bat unified_typing'
       }
     }
 
@@ -58,38 +58,38 @@ pipeline {
 
     stage('PostConfig') {
       steps {
-        bat '%sourceDir%/deploy_build.bat execute.postconfig_scripts'
+        bat '%workingDir%/deploy_build.bat execute.postconfig_scripts'
       }
     }
 
     stage('Register Custo') {
       steps {
-        bat '%sourceDir%/deploy_build.bat register.customization'
+        bat '%workingDir%/deploy_build.bat register.customization'
       }
     }
 
     stage('Generate WAR') {
       steps {
-        bat '%sourceDir%/deploy_build.bat custom_war'
+        bat '%workingDir%/deploy_build.bat custom_war'
       }
     }
 
     stage('Compile JPOs') {
       steps {
-        bat '%sourceDir%/deploy_build.bat  compile.JPOs'
+        bat '%workingDir%/deploy_build.bat  compile.JPOs'
       }
     }
 
     stage('Indexing') {
       steps {
-        bat '%sourceDir%/deploy_build.bat import.3DSpaceIndex'
+        bat '%workingDir%/deploy_build.bat import.3DSpaceIndex'
       }
     }
 
     stage('Distribute WAR') {
       steps {
-        bat '%sourceDir%/deploy_build.bat  create.output_dir'
-        bat '%sourceDir%/deploy_build.bat create.output_package'
+        bat '%workingDir%/deploy_build.bat  create.output_dir'
+        bat '%workingDir%/deploy_build.bat create.output_package'
       }
     }
 
@@ -98,6 +98,6 @@ pipeline {
     branchName = 'master'
     targetTag = '20200630120006'
     originTag = '20200630120004'
-    WorkingDir = 'C:\\Apps\\jenkins\\workspace\\SCMBuild'
+    workingDir = 'C:\\Apps\\jenkins\\workspace\\SCMBuild'
   }
 }
