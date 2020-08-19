@@ -52,7 +52,7 @@ pipeline {
 
     stage('Execute Spinner') {
       steps {
-        bat 'Spinner Execution'
+        bat 'echo Spinner Execution'
       }
     }
 
