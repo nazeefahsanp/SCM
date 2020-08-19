@@ -96,7 +96,7 @@ pipeline {
   }
   environment {
     branchName = 'master'
-    targetTag = '20200630120006'
+    targetTag = '20200630120007'
     originTag = '20200630120004'
     workingDir = 'C:\\Apps\\jenkins\\workspace\\SCMBuild'
   }
