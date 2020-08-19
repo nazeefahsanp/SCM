@@ -7,6 +7,11 @@ echo ######################## deploy.bat #########################
 
 set targetName=$1
 
+echo workingDir : %workingDir%
+echo originTag : %originTag%
+echo targetTag : %targetTag%
+
+
 REM Check for the deployment directory
 if "%originTag%"=="" (
      set buildDirName=%workingDir%\pwc.%branchName%.build.%targetTag%
