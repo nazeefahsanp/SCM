@@ -69,8 +69,19 @@ pipeline {
     }
 
     stage('Generate WAR') {
-      steps {
-        bat '%workingDir%/deploy_build.bat custom_war'
+      parallel {
+        stage('Generate WAR') {
+          steps {
+            bat '%workingDir%/deploy_build.bat custom_war'
+          }
+        }
+
+        stage('Test') {
+          steps {
+            bat 'echo'
+          }
+        }
+
       }
     }
 
