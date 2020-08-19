@@ -52,7 +52,7 @@ pipeline {
 
     stage('Execute Spinner') {
       steps {
-        bat '@echo off echo ******************************************************* echo ############### Spinner Execution Starts ################ echo. echo Spinner Execution completed ! echo. echo ############### Spinner Execution Ends ################'
+        bat 'Spinner Execution'
       }
     }
 
@@ -96,7 +96,7 @@ pipeline {
   }
   environment {
     branchName = 'master'
-    targetTag = '20200630120008'
+    targetTag = '20200630120009'
     originTag = '20200630120004'
     workingDir = 'C:\\Apps\\jenkins\\workspace\\SCM_BlueOcean'
   }
