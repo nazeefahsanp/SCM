@@ -12,7 +12,7 @@ proc main {outputLog} {
 		#Find if command exists		
 		if { [string compare [mql list command $sCommandName] $sCommandName] != 0 } {
 			#Create new command
-			mql add sCommandName label "SCM Test"
+			mql add $sCommandName label "SCM Test"
 			
 			puts $outputLog "Added new command to '$sCommandName'."
 		} else {

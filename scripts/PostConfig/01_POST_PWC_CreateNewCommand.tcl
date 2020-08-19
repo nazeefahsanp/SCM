@@ -13,7 +13,7 @@ proc main {outputLog} {
 		if { [string compare [mql list type $sMenuName] $sMenuName] != 0 } {
 			#adding menu
 			mql add menu $sMenuName label "SCM Test Menu"
-			mql mod menu $sMenuName add command $SCM_TEST_Command
+			mql mod menu $sMenuName add command SCM_TEST_Command
 
 			mql mod menu Actions add menu $sMenuName
 			puts $outputLog "added Menu"
