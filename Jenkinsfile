@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('TestCompleteTest') {
       steps {
-        testcompletetest()
+        testcompletetest(suite: 'C:\\Users\\nazeefahsanp\\Documents\\TestComplete 14 Projects\\3DEx_2020x_Sprint')
       }
     }
 
