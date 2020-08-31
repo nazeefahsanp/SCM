@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('TestCompleteTest') {
       steps {
-        testcompletetest(suite: 'C:\\Users\\nazeefahsanp\\Documents\\TestComplete 14 Projects\\3DEX_2020x_Sprint_test2\\3DEX_2020x_Sprint_test2.pjs', routine: '01-SCM_Command_test', useActiveSession: true, unit: '01-SCM_Command_test')
+        testcompletetest(suite: '\\TestComplete 14 Projects\\TestComplete_SCM\\TestComplete_SCM.pjs', useActiveSession: true, unit: '01-SCM_Command_test')
       }
     }
 
