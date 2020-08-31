@@ -4,7 +4,7 @@ pipeline {
     stage('Test Complete') {
       steps {
         node(label: 'TestComplete-Slave') {
-          testcompletetest(suite: 'C:\\Apps\\jenkins\\workspace\\Sprint_Pipeline1_TestJenkinsRepo\\TestComplete 14 Projects\\3DEX_2020x_Sprint_test2\\3DEX_2020x_Sprint_test2.pjs', useActiveSession: true)
+          testcompletetest(suite: 'C:\\TestComplete\\workspace\\TestCompleteJOB\\TestComplete 14 Projects\\TestComplete_SCM\\TestComplete_SCM.pjs', useActiveSession: true)
         }
 
       }
