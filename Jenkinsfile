@@ -1,9 +1,12 @@
 pipeline {
   agent any
   stages {
-    stage('TestCompleteTest') {
+    stage('Test Complete') {
       steps {
-        testcompletetest(suite: '\\TestComplete 14 Projects\\TestComplete_SCM\\TestComplete_SCM.pjs', useActiveSession: true, unit: '01-SCM_Command_test')
+        node(label: 'TestComplete-Slave') {
+          testcompletetest(suite: '\\TestComplete 14 Projects\\TestComplete_SCM\\TestComplete_SCM.pjs', useActiveSession: true)
+        }
+
       }
     }
 
